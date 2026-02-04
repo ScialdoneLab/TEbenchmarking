@@ -28,29 +28,65 @@ rule allout:
         "workflow/schemas/rulegraph.png",
         "workflow/schemas/dag.png",
 
+        # SoloTE
+        ## real datasets
+        RESULTS_PATH_SoloTE + "/results/SoloTEout/10xPBMC/pbmc8k/",
+        RESULTS_PATH_SoloTE + "/results/SoloTEout_thr0/10xPBMC/pbmc8k/",
+        RESULTS_PATH_SoloTE + "/results/SoloTEout_thr1/10xPBMC/pbmc8k/",
+        RESULTS_PATH_SoloTE + "/results/SoloTEout_thr2/10xPBMC/pbmc8k/",
+        RESULTS_PATH_SoloTE + "/results/SoloTEout/10xMouse_RA/LIF/",
+        RESULTS_PATH_SoloTE + "/results/SoloTEout_thr0/10xMouse_RA/LIF/",
+        RESULTS_PATH_SoloTE + "/results/SoloTEout_thr1/10xMouse_RA/LIF/",
+        RESULTS_PATH_SoloTE + "/results/SoloTEout_thr2/10xMouse_RA/LIF/",
+        ## TE simulations
+        RESULTS_PATH_SoloTE + "/results/SoloTEout/simulated_mm_RA/all",
+        RESULTS_PATH_SoloTE + "/results/SoloTEout/simulated_mm_RA/young",
         RESULTS_PATH_SoloTE + "/results/SoloTEout/simulated_mm_RA/old",
+        RESULTS_PATH_SoloTE + "/results/SoloTEout_thr0/simulated_mm_RA/all",
+        RESULTS_PATH_SoloTE + "/results/SoloTEout_thr0/simulated_mm_RA/young",
         RESULTS_PATH_SoloTE + "/results/SoloTEout_thr0/simulated_mm_RA/old",
+        RESULTS_PATH_SoloTE + "/results/SoloTEout_thr1/simulated_mm_RA/all",
+        RESULTS_PATH_SoloTE + "/results/SoloTEout_thr1/simulated_mm_RA/young",
         RESULTS_PATH_SoloTE + "/results/SoloTEout_thr1/simulated_mm_RA/old",
+        RESULTS_PATH_SoloTE + "/results/SoloTEout_thr2/simulated_mm_RA/all",
+        RESULTS_PATH_SoloTE + "/results/SoloTEout_thr2/simulated_mm_RA/young",
         RESULTS_PATH_SoloTE + "/results/SoloTEout_thr2/simulated_mm_RA/old",
-
+        ## gene+TE simulation
         RESULTS_PATH_SoloTE + "/results/SoloTEout/simulated_mm_RA_wGenes/all",
         RESULTS_PATH_SoloTE + "/results/SoloTEout_thr0/simulated_mm_RA_wGenes/all",
         RESULTS_PATH_SoloTE + "/results/SoloTEout_thr1/simulated_mm_RA_wGenes/all",
         RESULTS_PATH_SoloTE + "/results/SoloTEout_thr2/simulated_mm_RA_wGenes/all",
 
+        # Stellarscope
+        ## real datasets
+        RESULTS_PATH_Stellarscope + "/results/stellarscope_out/10xPBMC/pbmc8k/pseudobulk/",
+        RESULTS_PATH_Stellarscope + "/results/stellarscope_out/10xPBMC/pbmc8k/celltype/",
+        RESULTS_PATH_Stellarscope + "/results/stellarscope_out/10xMouse_RA/LIF/pseudobulk/",
+        ## TE simulations
+        RESULTS_PATH_Stellarscope + "/results/stellarscope_out/hg_simulated/10xPBMC_sim/pseudobulk/",
         RESULTS_PATH_Stellarscope + "/results/stellarscope_out/simulated_mm_RA/old/pseudobulk/",
         RESULTS_PATH_Stellarscope + "/results/stellarscope_out/simulated_mm_RA/young/pseudobulk/",
         RESULTS_PATH_Stellarscope + "/results/stellarscope_out/simulated_mm_RA/all/pseudobulk/",
-
-        RESULTS_PATH_Stellarscope + "/results/stellarscope_out/simulated_mm_RA_k200_pseudobulk_onestep/old/old_pseudobulk-TE_counts.mtx",
-        RESULTS_PATH_Stellarscope + "/results/stellarscope_out/simulated_mm_RA_k200_pseudobulk_onestep/young/young_pseudobulk-TE_counts.mtx",
-        RESULTS_PATH_Stellarscope + "/results/stellarscope_out/simulated_mm_RA_k200_pseudobulk_onestep/all/all_pseudobulk-TE_counts.mtx",
-
+        RESULTS_PATH_Stellarscope + "/results/stellarscope_out/simulated_mm_RA/old/pseudobulk_thr0.9/",
+        RESULTS_PATH_Stellarscope + "/results/stellarscope_out/simulated_mm_RA/young/pseudobulk_thr0.9/",
+        RESULTS_PATH_Stellarscope + "/results/stellarscope_out/simulated_mm_RA/all/pseudobulk_thr0.9/",
+        # gene+TE simulation
+        RESULTS_PATH_Stellarscope + "/results/stellarscope_out/simulated_mm_RA_wGenes/all/pseudobulk/"
         RESULTS_PATH_Stellarscope + "/results/stellarscope_out/simulated_mm_RA_wGenes_pseudobulk_onestep/all/all_pseudobulk-TE_counts.mtx",
 
-        RESULTS_PATH_STARsoloTE + "/results/STARsolo_EM/simulated_mm_RA/all/TE_Solo.out"
-        
+        # STARsolo TE with and without EM
+        ## real datasets
+        RESULTS_PATH_STARsoloTE + "/results/STARsolo_EM_TE/10xMouse_RA/LIF/TE_Solo.out",
+        RESULTS_PATH_STARsoloTE + "/results/STARsolo_EM_TE/10xPBMC/pbmc8k/TE_Solo.out",
+        ## TE simulations
+        RESULTS_PATH_STARsoloTE + "/results/STARsolo_EM_TE/simulated_mm_RA/all/TE_Solo.out",
+        RESULTS_PATH_STARsoloTE + "/results/STARsolo_EM_TE/simulated_mm_RA/old/TE_Solo.out",
+        RESULTS_PATH_STARsoloTE + "/results/STARsolo_EM_TE/simulated_mm_RA/young/TE_Solo.out",
+        # gene+TE simulation
         RESULTS_PATH_STARsoloTE + "/results/STARsolo_EM_TEwGenes/simulated_mm_RA_wGenes/all/TE_Solo.out"
+        #RESULTS_PATH_STARsoloTE + "/results/STARsolo_EM/simulated_mm_RA/all/TE_Solo.out"
+        
+        
 
 
 rule generate_rulegraph:
