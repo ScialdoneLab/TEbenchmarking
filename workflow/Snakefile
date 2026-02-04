@@ -1,0 +1,79 @@
+from snakemake.utils import min_version
+import glob
+min_version("5.3.0")
+
+# add paths of the directories where results of each tool should be stored
+RESULTS_PATH_STAR=""
+RESULTS_PATH_STARsoloTE=""
+RESULTS_PATH_SoloTE=""
+RESULTS_PATH_Stellarscope=""
+
+
+DATA_PATH=".../snakemake_data" # path to directory where input data is stored
+MAIN_PATH=".../TEbenchmarking" # path of this repo
+BASE_DIR=workflow.current_basedir
+
+
+include: "rules/common.smk"
+include: "rules/star_align.smk"
+include: "rules/starSolo_TE.smk"
+include: "rules/soloTE.smk"
+include: "rules/stellarscope.smk"
+
+rule allout:
+    """
+    Collect the main outputs of the workflow.
+    """
+    input:
+        "workflow/schemas/rulegraph.png",
+        "workflow/schemas/dag.png",
+
+        RESULTS_PATH_SoloTE + "/results/SoloTEout/simulated_mm_RA/old",
+        RESULTS_PATH_SoloTE + "/results/SoloTEout_thr0/simulated_mm_RA/old",
+        RESULTS_PATH_SoloTE + "/results/SoloTEout_thr1/simulated_mm_RA/old",
+        RESULTS_PATH_SoloTE + "/results/SoloTEout_thr2/simulated_mm_RA/old",
+
+        RESULTS_PATH_SoloTE + "/results/SoloTEout/simulated_mm_RA_wGenes/all",
+        RESULTS_PATH_SoloTE + "/results/SoloTEout_thr0/simulated_mm_RA_wGenes/all",
+        RESULTS_PATH_SoloTE + "/results/SoloTEout_thr1/simulated_mm_RA_wGenes/all",
+        RESULTS_PATH_SoloTE + "/results/SoloTEout_thr2/simulated_mm_RA_wGenes/all",
+
+        RESULTS_PATH_Stellarscope + "/results/stellarscope_out/simulated_mm_RA/old/pseudobulk/",
+        RESULTS_PATH_Stellarscope + "/results/stellarscope_out/simulated_mm_RA/young/pseudobulk/",
+        RESULTS_PATH_Stellarscope + "/results/stellarscope_out/simulated_mm_RA/all/pseudobulk/",
+
+        RESULTS_PATH_Stellarscope + "/results/stellarscope_out/simulated_mm_RA_k200_pseudobulk_onestep/old/old_pseudobulk-TE_counts.mtx",
+        RESULTS_PATH_Stellarscope + "/results/stellarscope_out/simulated_mm_RA_k200_pseudobulk_onestep/young/young_pseudobulk-TE_counts.mtx",
+        RESULTS_PATH_Stellarscope + "/results/stellarscope_out/simulated_mm_RA_k200_pseudobulk_onestep/all/all_pseudobulk-TE_counts.mtx",
+
+        RESULTS_PATH_Stellarscope + "/results/stellarscope_out/simulated_mm_RA_wGenes_pseudobulk_onestep/all/all_pseudobulk-TE_counts.mtx",
+
+        RESULTS_PATH_STARsoloTE + "/results/STARsolo_EM/simulated_mm_RA/all/TE_Solo.out"
+        
+        RESULTS_PATH_STARsoloTE + "/results/STARsolo_EM_TEwGenes/simulated_mm_RA_wGenes/all/TE_Solo.out"
+
+
+rule generate_rulegraph:
+    """
+    Generate a rulegraph for the workflow.
+    """
+    output:
+        "workflow/schemas/rulegraph.png"
+    params:
+        basedir=BASE_DIR
+    shell:
+        """
+        snakemake --snakefile workflow/Snakefile --rulegraph | dot -Tpng > {output}
+        echo {params.basedir}
+        """
+
+rule generate_dag:
+    """
+    Generate a dag for the workflow.
+    """
+    output:
+        "workflow/schemas/dag.png"
+    shell:
+        """
+        snakemake --snakefile workflow/Snakefile --dag | dot -Tpng > {output}
+        """

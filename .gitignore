@@ -1,13 +1,1 @@
-tmp/
 .snakemake/
-Log.out
-data/TEannotation/
-.cache/
-.config/
-.wget-hsts
-Rscripts/annotation/
-Rscripts/data/
-jupyterNotebooks/data/
-workflow/Snakefile
-logs/
-benchmarks/
