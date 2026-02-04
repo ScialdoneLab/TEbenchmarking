@@ -1,0 +1,12 @@
+[submodule "code/SoloTE"]
+	path = code/SoloTE
+	url = https://github.com/bvaldebenitom/SoloTE.git
+[submodule "code/CellRangerTE"]
+	path = code/CellRangerTE
+	url = https://github.com/mhammell-laboratory/CellRangerTE.git
+[submodule "code/MATES"]
+	path = code/MATES
+	url = https://github.com/mcgilldinglab/MATES.git
+[submodule "code/SoloTE_selectMAPQthr"]
+	path = code/SoloTE_selectMAPQthr
+	url = https://github.com/veronica-fin/SoloTE_selectMAPQthr.git

@@ -1,0 +1,97 @@
+datasets:
+  10xMouseInternal:
+    sample_ids: 
+      - 23L000616
+      - 23L000617
+      - 23L000618
+    genome: "mm10"
+    read_length: 150
+    UMI_length: "12"
+    whitelist: "data/whitelists/3M-february-2018.txt.gz"
+    strandedness: "Forward"
+    simulated: False
+  10xPBMC:
+    sample_ids:
+      - pbmc8k
+    genome: "hg38"
+    read_length: 98
+    UMI_length: "10"
+    whitelist: "data/whitelists/10xPBMC_sub_whitelist.tsv.gz"
+    strandedness: "Forward"
+    simulated: False
+  hg_simulated:
+    sample_ids:
+      - 10xPBMC_sim
+    genome: "hg38"
+    read_length: 98 # should be 101 but I don't want to run it twice
+    UMI_length: "10"
+    whitelist: "data/whitelists/minnow_whitelist_hg_10xPBMC.txt.gz" # or the 737 CR whitelist
+    strandedness: "Reverse"
+    simulated: True
+  mm_simulated:
+    sample_ids:
+      - 10xMouse_sim
+    genome: "mm10"
+    read_length: 101
+    UMI_length: "10"
+    whitelist: "data/whitelists/minnow_whitelist_mm_10xMouse.txt.gz" # or the 737 CR whitelist
+    strandedness: "Reverse"
+    simulated: True
+  simulated_mm_RA:
+    sample_ids:
+      - old
+      - young
+      - all
+      - all_prev
+    genome: "mm10"
+    read_length: 101
+    UMI_length: "10"
+    whitelist: "data/whitelists/737K-august-2016.txt.gz" # previously: just the 500 barcodes coming from minnow
+    strandedness: "Unstranded"
+  10xMouse_RA:
+    sample_ids: 
+      - LIF
+    genome: "mm10"
+    read_length: 101 
+    UMI_length: "12  --soloCBlen 16 --soloBarcodeReadLength 0"
+    whitelist: "data/whitelists/3M-february-2018.txt.gz"
+    strandedness: "Forward"
+  10xHorgue:
+    sample_ids:
+      - SRR16188429
+      - SRR16188430
+      - SRR16188431
+      - SRR16188432
+      - SRR16188433
+      - SRR16188434
+      - SRR16188435
+    genome: "mm10"
+    read_length: 
+    UMI_length: "12  --soloCBlen 16 --soloBarcodeReadLength 0"
+    whitelist: "data/whitelists/737K-august-2016.txt.gz"
+
+genomes:
+  mm10:
+    fasta: "references/mm10/GRCm38.p4.genome.fa.gz"
+    gtf: "references/mm10/gencode.vM10.annotation.gtf.gz"
+    rmsk_gtf: "TEannotation/mm10_GENCODE_rmsk_TE.gtf.gz"
+    GeneTE_gtf: ""
+    cr_id: "GRCm39"
+    cr_version: "M26"
+  hg38:
+    fasta: "references/hg38/GRCh38.p14.genome.fa.gz"
+    gtf: "references/hg38/gencode.v30.annotation.gtf.gz"
+    rmsk_gtf: "TEannotation/hg38_GENCODE_rmsk_TE.gtf.gz"
+    GeneTE_gtf: ""
+    cr_id: "GRCh38"
+    cr_version: "35"
+
+conf:
+  best:
+    extra_params: "--outSAMmultNmax 1"
+  score:
+    extra_params: ""
+  best_scTE:
+    extra_params: "--outSAMmultNmax 1 --outMultimapperOrder Random --runRNGseed 777"
+  mates:
+    extra_params: "--soloMultiMappers EM --quantMode GeneCounts"
