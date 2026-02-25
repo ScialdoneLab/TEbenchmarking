@@ -1,2 +1,5 @@
 data_mouse/mm10_GENCODE_rmsk_TE.gtf
 data_mouse/GRCm38.primary_assembly.genome.fa
+data_mouse/gencode.vM10.annotation.gtf.gz
+/mnt/TEdata/snakemake_TE_full/computeAge_mm10/output.txt
+/mnt/TEdata/TEbenchmarking/data/TEannotation/mm10_GENCODE_rmsk_TE.gtf.gz
