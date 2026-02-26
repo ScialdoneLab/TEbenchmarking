@@ -7,7 +7,6 @@ Benchmarking single-cell, locus-specific TE analysis tools in scRNA-seq
 Snakemake workflow in folders:
 
 - **config** (config file)
-- 
 - **workflow** (Snakefile, rules and conda environments)
 
 Dockerfile: Dockerfile_containerize
