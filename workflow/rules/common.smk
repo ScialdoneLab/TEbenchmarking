@@ -64,7 +64,6 @@ def get_index_TE_dir(wildcards):
 
 
 
-
 # for STARsolo with TEs
 def get_GeneTEannotation_gtf(wildcards):
     genomeid=config["datasets"][wildcards.dataset]["genome"]
@@ -72,39 +71,14 @@ def get_GeneTEannotation_gtf(wildcards):
 
 
 # For SoloTE
-# I could also use TEannotation/{wildcards.genome_id}_rmsk.bed
 def get_annotation_SoloTE(wildcards):
     genomeid=config["datasets"][wildcards.dataset]["genome"]
     return f"data/TEannotation/{genomeid}_rmsk.bed"
-
-
-# For CellrangerTE
-def get_cr_genome_id(wildcards):
-    return config["genomes"][wildcards.genome_id]["cr_id"]
-def get_cr_genome_version(wildcards):
-    return config["genomes"][wildcards.genome_id]["cr_version"]
-
-
-# get all sample names for a given dataset (needed for MATES)
-def get_sample_names(wildcards):
-    return config["datasets"][wildcards.dataset]["sample_ids"]
 
 def get_bam_indexes(wildcards):
     dataset=wildcards.dataset
     sample_ids=list(config["datasets"][wildcards.dataset]["sample_ids"])
     return expand(RESULTS_PATH_STAR + f"/results/STARoutdir/{dataset}/{{sample_ids}}/score_Aligned.sortedByCoord.out.bam.bai", sample_ids=sample_ids)
-
-# translate genome id into species name (needed for MATES)
-def get_species(wildcards):
-    if wildcards.genome_id=="mm10":
-        return "Mouse"
-    elif wildcards.genome_id=="hg38":
-        return "Human"
-
-# get path to bed file of TE annotation for MATES
-def get_TE_nooverlap_bed(wildcards):
-    genomeid=config["datasets"][wildcards.dataset]["genome"]
-    return RESULTS_PATH_MATES + "/{genomeid}/TE_nooverlap.bed"
 
 def get_strandedness(wildcards):
     strandedness = config["datasets"][wildcards.dataset]["strandedness"]

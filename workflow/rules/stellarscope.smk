@@ -37,29 +37,6 @@ rule setup_stellarscope:
         	{input.bam} {input.barcodes} 2> {log}
         """
 
-# rule make_minnow_unstranded:
-#     """
-#     transform minnow-derived, stellarscope-sorted bam files to be unstranded
-#     """
-#     output:
-#         bam=RESULTS_PATH_STAR + "/results/STARoutdir/{dataset}/{sample_id}/score_Aligned.changedStrand.bam"
-#     input:
-#         bam=RESULTS_PATH_STAR + "/results/STARoutdir/{dataset}/{sample_id}/score_Aligned.sortedByCB.bam",
-#         gtf=get_TEannotation_dataset
-#     log:
-#         "logs/stellarscope/{dataset}_{sample_id}_changeStrands.log"
-#     params:
-#         genome_id=get_genome,
-#         results_path=RESULTS_PATH_STAR
-#     threads: 12
-#     resources:
-#         mem_gb=48
-#     benchmark:
-#         "benchmarks/stellarscope_{dataset}_{sample_id}_changeStrands.txt"
-#     conda: 
-#         "../envs/pyBamEnv.yml"
-#     shell:
-#         "python workflow/scripts/changeStrands.py {input.bam} {input.gtf} {output.bam}"
 
 rule unzip_TEannotation:
     """
@@ -142,9 +119,7 @@ rule run_stellarscope_load:
         RESULTS_PATH_Stellarscope + "/results/stellarscope_out/{dataset}/{sample_id}/stload/{sample_id}_stload-checkpoint.dedup_umi.pickle"
 
     input:
-        #bam=get_stellarscope_bam,
         bam=RESULTS_PATH_STAR + "/results/STARoutdir/{dataset}/{sample_id}/score_Aligned.sortedByCB.bam",
-        #barcodes=RESULTS_PATH_STAR + "/results/STARoutdir/{dataset}/{sample_id}/score_Solo.out/Gene/filtered/barcodes.tsv",
         barcodes=get_whitelist,
         TEannotation=get_TEannotation_dataset_unzipped
     log:

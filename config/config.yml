@@ -8,15 +8,6 @@ datasets:
     whitelist: "data/whitelists/10xPBMC_sub_whitelist.tsv.gz"
     strandedness: "Forward"
     simulated: False
-  hg_simulated:
-    sample_ids:
-      - 10xPBMC_sim
-    genome: "hg38"
-    read_length: 98 # should be 101 but no need to run genome indexing twice
-    UMI_length: "10"
-    whitelist: "data/whitelists/minnow_whitelist_hg_10xPBMC.txt.gz" # or the 737 CR whitelist
-    strandedness: "Reverse"
-    simulated: True
   mm_simulated:
     sample_ids:
       - 10xMouse_sim
@@ -55,9 +46,9 @@ datasets:
       - SRR16188434
       - SRR16188435
     genome: "mm10"
-    read_length: 
+    read_length: 101
     UMI_length: "12  --soloCBlen 16 --soloBarcodeReadLength 0"
-    whitelist: "data/whitelists/737K-august-2016.txt.gz"
+    whitelist: "whitelists/737K-august-2016.txt.gz"
 
 genomes:
   mm10:
@@ -80,7 +71,3 @@ conf:
     extra_params: "--outSAMmultNmax 1"
   score:
     extra_params: ""
-  best_scTE:
-    extra_params: "--outSAMmultNmax 1 --outMultimapperOrder Random --runRNGseed 777"
-  mates:
-    extra_params: "--soloMultiMappers EM --quantMode GeneCounts"
