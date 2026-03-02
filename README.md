@@ -20,4 +20,6 @@ Scripts for data simulation using Minnow and splatter in folder **simulations**
 Notebooks with analysis used for tool evaluation available in folder **evaluation**
 
 
+*Preprint published on Biorxiv (10.64898/2026.02.26.708244)*
+
 *Data will be published on Zenodo (10.5281/zenodo.18772673)*
