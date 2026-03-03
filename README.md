@@ -22,4 +22,4 @@ Notebooks with analysis used for tool evaluation available in folder **evaluatio
 
 *Preprint published on Biorxiv (10.64898/2026.02.26.708244)*
 
-*Data will be published on Zenodo (10.5281/zenodo.18772673)*
+*Data is be available on Zenodo (10.5281/zenodo.18772673)*
