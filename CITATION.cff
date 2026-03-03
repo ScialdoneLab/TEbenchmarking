@@ -1,0 +1,50 @@
+cff-version: 1.2.0
+message: "If you use this code, please cite both the GitHub repository and the associated preprint using the metadata provided in this file."
+title: "TEbenchmarking"
+type: workflow
+abstract: >
+  A reproducible benchmarking workflow for evaluating computational tools
+  for locus-specific analysis of transposable elements (TEs) in short-read
+  single-cell RNA-seq datasets.
+repository-code: "https://github.com/ScialdoneLab/TEbenchmarking"
+license: "CC-BY-4.0"
+
+authors:
+  - family-names: "Finazzi"
+    given-names: "Veronica"
+    affiliation: "Helmholtz Zentrum München"
+  - family-names: "Vallejos"
+    given-names: "Catalina A."
+    affiliation: "University of Edinburgh, Institute of Genetics and Cancer"
+  - family-names: "Scialdone"
+    given-names: "Antonio"
+    affiliation: "Helmholtz Zentrum München"
+
+preferred-citation:
+  type: article
+  title: "Benchmarking computational tools for locus-specific analysis of transposable elements in single-cell RNA-seq datasets"
+  authors:
+    - family-names: "Finazzi"
+      given-names: "Veronica"
+    - family-names: "Vallejos"
+      given-names: "Catalina A."
+    - family-names: "Scialdone"
+      given-names: "Antonio"
+  journal: "bioRxiv"
+  year: 2026
+  publisher: "Cold Spring Harbor Laboratory"
+  doi: "10.64898/2026.02.26.708244"
+  notes: "Preprint"
+
+identifiers:
+  - type: doi
+    value: "10.5281/zenodo.18772673"
+    description: "Zenodo record for TEbenchmarking data"
+
+keywords:
+  - transposable elements
+  - single-cell RNA-seq
+  - scRNA-seq
+  - benchmarking
+  - locus-specific quantification
+  - computational genomics
