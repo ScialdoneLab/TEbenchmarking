@@ -1,0 +1,24 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it using the metadata in this file."
+title: "TEbenchmarking"
+type: software
+abstract: "Benchmarking single-cell, locus-specific transposable element (TE) analysis tools in scRNA-seq."
+repository-code: "https://github.com/<REPO_OWNER>/TEbenchmarking"
+license: "CC-BY-4.0"
+authors:
+  - family-names: "Unknown"
+    given-names: "Unknown"
+    affiliation: "Unknown"
+preferred-citation:
+  type: article
+  title: "TEbenchmarking: Benchmarking single-cell, locus-specific TE analysis tools in scRNA-seq"
+  authors:
+    - family-names: "Unknown"
+      given-names: "Unknown"
+  journal: "bioRxiv"
+  doi: "10.64898/2026.02.26.708244"
+  notes: "Preprint"
+identifiers:
+  - type: doi
+    value: "10.5281/zenodo.18772673"
+    description: "Zenodo record for data/artifacts"
