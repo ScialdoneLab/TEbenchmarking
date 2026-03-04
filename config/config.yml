@@ -1,15 +1,4 @@
 datasets:
-  10xMouseInternal:
-    sample_ids: 
-      - 23L000616
-      - 23L000617
-      - 23L000618
-    genome: "mm10"
-    read_length: 150
-    UMI_length: "12"
-    whitelist: "data/whitelists/3M-february-2018.txt.gz"
-    strandedness: "Forward"
-    simulated: False
   10xPBMC:
     sample_ids:
       - pbmc8k
@@ -23,7 +12,7 @@ datasets:
     sample_ids:
       - 10xPBMC_sim
     genome: "hg38"
-    read_length: 98 # should be 101 but I don't want to run it twice
+    read_length: 98 # should be 101 but no need to run genome indexing twice
     UMI_length: "10"
     whitelist: "data/whitelists/minnow_whitelist_hg_10xPBMC.txt.gz" # or the 737 CR whitelist
     strandedness: "Reverse"
@@ -46,7 +35,7 @@ datasets:
     genome: "mm10"
     read_length: 101
     UMI_length: "10"
-    whitelist: "data/whitelists/737K-august-2016.txt.gz" # previously: just the 500 barcodes coming from minnow
+    whitelist: "data/whitelists/737K-august-2016.txt.gz"
     strandedness: "Unstranded"
   10xMouse_RA:
     sample_ids: 
