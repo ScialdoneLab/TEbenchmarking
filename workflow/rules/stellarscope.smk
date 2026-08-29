@@ -24,7 +24,7 @@ rule setup_stellarscope:
     benchmark:
         "benchmarks/setup_stellarscope_{dataset}_{sample_id}.txt"
     conda: 
-        "../envs/stellarscope.yml"
+        "../envs/stellarscope_bioconda.yml"
     shell:
         """
         mkdir -p {params.results_path}/results/stellarscope/
@@ -54,7 +54,7 @@ rule unzip_TEannotation:
     benchmark:
         "benchmark/unzip_TEannotation_{genome_id}.txt"
     conda:
-        "../envs/stellarscope.yml"
+        "../envs/stellarscope_bioconda.yml"
     shell:
         "gunzip -c {input.TEannotation} > {output.TEgtf_unzipped}"
 
@@ -82,7 +82,7 @@ rule run_stellarscope_pseudobulk_onestep:
     benchmark:
         "benchmarks/run_stellarscope_onestep_{dataset}_{sample_id}.txt"
     conda: 
-        "../envs/stellarscope.yml"
+        "../envs/stellarscope_bioconda.yml"
     shell:
         """
         # create a directory 
@@ -101,7 +101,7 @@ rule run_stellarscope_pseudobulk_onestep:
             --nproc {threads} \
             --pooling_mode pseudobulk \
             --reassign_mode best_exclude \
-            --logfile logs/stellarscope/{wildcards.dataset}_{wildcards.sample_id}_onestep_pseudobulk.txt \
+            --logfile {log} \
             --max_iter 500 \
             --updated_sam \
             {input.bam}  \
@@ -133,7 +133,7 @@ rule run_stellarscope_load:
     benchmark:
         "benchmarks/run_stellarscope_load_{dataset}_{sample_id}.txt"
     conda: 
-        "../envs/stellarscope.yml"
+        "../envs/stellarscope_bioconda.yml"
     shell:
         """
         # create a directory 
@@ -177,11 +177,11 @@ rule run_stellarscope_pseudobulk:
         results_path=RESULTS_PATH_Stellarscope
     threads: 12
     resources:
-        mem_gb=96
+        mem_gb=250
     benchmark:
         "benchmarks/run_stellarscope_pseudobulk_{dataset}_{sample_id}.txt"
     conda: 
-        "../envs/stellarscope.yml"
+        "../envs/stellarscope_bioconda.yml"
     shell:
         """
         # create a directory for stellarscope pseudobulk results
@@ -201,12 +201,56 @@ rule run_stellarscope_pseudobulk:
             --logfile logs/stellarscope/{wildcards.dataset}_{wildcards.sample_id}_resume_pseudobulk.txt \
             --max_iter 500 \
             --updated_sam \
+            --debug \
             {params.results_path}/results/stellarscope_out/{wildcards.dataset}/{wildcards.sample_id}/stload/{wildcards.sample_id}_stload-checkpoint.dedup_umi.pickle
         #  --use_every_reassign_mode 
 
         """
 
 
+rule run_stellarscope_pseudobulk_thr:
+    """
+    Run stellarscope with pseudobulk pooling mode
+    """
+    output:
+        directory(RESULTS_PATH_Stellarscope + "/results/stellarscope_out/{dataset}/{sample_id}/pseudobulk_thr{conf}/")
+    input:
+        pickle=RESULTS_PATH_Stellarscope + "/results/stellarscope_out/{dataset}/{sample_id}/stload/{sample_id}_stload-checkpoint.dedup_umi.pickle"
+    log:
+        "logs/stellarscope/{dataset}_{sample_id}_thr{conf}_resume_pseudobulk.txt"
+    params:
+        results_path=RESULTS_PATH_Stellarscope
+    threads: 12
+    resources:
+        mem_gb=96
+    benchmark:
+        "benchmarks/run_stellarscope_pseudobulk_{dataset}_{sample_id}_thr{conf}.txt"
+    conda: 
+        "../envs/stellarscope_bioconda.yml"
+    shell:
+        """
+        # create a directory for stellarscope pseudobulk results
+        mkdir -p "{params.results_path}/results/stellarscope_out"
+        mkdir -p "{params.results_path}/results/stellarscope_out/{wildcards.dataset}"
+        mkdir -p "{params.results_path}/results/stellarscope_out/{wildcards.dataset}/{wildcards.sample_id}/"
+        mkdir -p "{params.results_path}/results/stellarscope_out/{wildcards.dataset}/{wildcards.sample_id}/pseudobulk_thr{wildcards.conf}/"
+        outfolder="{params.results_path}/results/stellarscope_out/{wildcards.dataset}/{wildcards.sample_id}/pseudobulk_thr{wildcards.conf}/"
+        
+        # use stellarscope resume to continue from the deduplication checkpoint
+        stellarscope resume \
+            --exp_tag {wildcards.sample_id}_pseudobulk \
+            --outdir $outfolder \
+            --nproc {threads} \
+            --pooling_mode pseudobulk \
+            --reassign_mode best_conf \
+            --conf_prob {wildcards.conf} \
+            --logfile logs/stellarscope/{wildcards.dataset}_{wildcards.sample_id}_thr{wildcards.conf}_resume_pseudobulk.txt \
+            --max_iter 500 \
+            --debug \
+            --updated_sam {input.pickle}
+        #  --use_every_reassign_mode 
+
+        """
 
 
 rule run_stellarscope_celltype:
@@ -228,7 +272,7 @@ rule run_stellarscope_celltype:
     benchmark:
         "benchmarks/run_stellarscope_celltype_{dataset}_{sample_id}.txt"
     conda: 
-        "../envs/stellarscope.yml"
+        "../envs/stellarscope_bioconda.yml"
     log:
         "logs/stellarscope/{dataset}_{sample_id}_resume_celltype.log"
     shell:

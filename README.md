@@ -2,6 +2,10 @@
 
 Benchmarking single-cell, locus-specific TE analysis tools in scRNA-seq
 
+*Preprint published on Biorxiv (10.64898/2026.02.26.708244)*
+
+*Data is be available on Zenodo (10.5281/zenodo.18772673)*
+
 ## Preprocessing and TE quantification
 
 Snakemake workflow in folders:
@@ -11,7 +15,7 @@ Snakemake workflow in folders:
 
 Dockerfile: Dockerfile_containerize
 
-## Configure input and output paths
+### Configure input and output paths
 
 Machine-specific paths are defined in `config/config.yaml`.
 
@@ -46,6 +50,3 @@ Scripts for data simulation using Minnow and splatter in folder **simulations**
 Notebooks with analysis used for tool evaluation available in folder **evaluation**
 
 
-*Preprint published on Biorxiv (10.64898/2026.02.26.708244)*
-
-*Data is be available on Zenodo (10.5281/zenodo.18772673)*

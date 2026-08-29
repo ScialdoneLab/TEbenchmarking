@@ -106,5 +106,5 @@ def get_strandedness_stellarscope(wildcards):
     if config["datasets"][wildcards.dataset]["strandedness"]=="Reverse":
         strandedness="R"
     else:
-        strandedness="F" # forward stranded or unstranded, which will be first made forward stranded
+        strandedness="F" 
     return strandedness
