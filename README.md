@@ -11,6 +11,32 @@ Snakemake workflow in folders:
 
 Dockerfile: Dockerfile_containerize
 
+## Configure input and output paths
+
+Machine-specific paths are defined in `config/config.yaml`.
+
+Before running the workflow, edit the `paths` section to identify:
+
+- the repository directory;
+- the input-data directory;
+- the output directory used by each tool.
+
+Relative paths are resolved from the directory where Snakemake is executed.
+Absolute paths can be used for mounted volumes on virtual machines.
+
+Example:
+
+```yaml
+paths:
+  main: "/mnt/project/TEbenchmarking"
+  data: "/mnt/data/snakemake_data"
+
+  results:
+    star: "/mnt/results/star"
+    starsolo_te: "/mnt/results/starsolo_te"
+    solote: "/mnt/results/solote"
+    stellarscope: "/mnt/results/stellarscope"
+
 ## Data simulation
 
 Scripts for data simulation using Minnow and splatter in folder **simulations**

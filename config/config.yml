@@ -1,3 +1,12 @@
+paths:
+  main: "." # full path of the repo
+  data: "snakemake_data" # folder where input data is stored
+  results: # folders to save results
+    star: "."
+    starsolo_te: "."
+    solote: "."
+    stellarscope: "."
+
 datasets:
   10xPBMC:
     sample_ids:
@@ -7,7 +16,7 @@ datasets:
     UMI_length: "10"
     whitelist: "data/whitelists/10xPBMC_sub_whitelist.tsv.gz"
     strandedness: "Forward"
-    simulated: False
+    simulated: false
   10xMouse_PBMC:
     sample_ids:
       - 10k
@@ -17,7 +26,7 @@ datasets:
     UMI_length: "12  --soloCBlen 16 --soloBarcodeReadLength 0"
     whitelist: "data/whitelists/3M-february-2018.txt.gz"
     strandedness: "Forward"
-    simulated: False
+    simulated: false
     download:
       wget:
         - https://s3-us-west-2.amazonaws.com/10x.files/samples/cell-exp/6.0.0/SC3_v3_NextGem_DI_CellPlex_Mouse_PBMC_10K_Multiplex/SC3_v3_NextGem_DI_CellPlex_Mouse_PBMC_10K_Multiplex_fastqs.tar
@@ -30,61 +39,11 @@ datasets:
     UMI_length: "12  --soloCBlen 16 --soloBarcodeReadLength 0"
     whitelist: "data/whitelists/3M-february-2018.txt.gz"
     strandedness: "Forward"
+    simulated: false
     download:
       SRA:
         - SRR16975081
     # https://pmc.ncbi.nlm.nih.gov/articles/PMC8901440/#sec4
-  simulated_mm_RA_50kRpC:
-      sample_ids:
-        - old
-        - young
-        - all
-      genome: "mm10"
-      read_length: 101
-      UMI_length: "10"
-      whitelist: "data/whitelists/737K-august-2016.txt.gz"
-      strandedness: "Unstranded"
-  simulated_mm_RA_20kRpC:
-    sample_ids:
-      - old
-      - young
-      - all
-    genome: "mm10"
-    read_length: 101
-    UMI_length: "10"
-    whitelist: "data/whitelists/737K-august-2016.txt.gz"
-    strandedness: "Unstranded"
-  simulated_mm_RA_5kRpC:
-    sample_ids:
-      - old
-      - young
-      - all
-    genome: "mm10"
-    read_length: 101
-    UMI_length: "10"
-    whitelist: "data/whitelists/737K-august-2016.txt.gz"
-    strandedness: "Unstranded"
-  simulated_mm_RA_k200:
-    sample_ids:
-      - old
-      - young
-      - all
-    genome: "mm10"
-    read_length: 201
-    UMI_length: "10"
-    whitelist: "data/whitelists/737K-august-2016.txt.gz" 
-    strandedness: "Unstranded"
-  simulated_mm_RA:
-    sample_ids:
-      - old
-      - young
-      - all
-      - all_prev
-    genome: "mm10"
-    read_length: 101
-    UMI_length: "10"
-    whitelist: "data/whitelists/737K-august-2016.txt.gz"
-    strandedness: "Unstranded"
   10xMouse_RA:
     sample_ids: 
       - LIF
@@ -93,6 +52,7 @@ datasets:
     UMI_length: "12  --soloCBlen 16 --soloBarcodeReadLength 0"
     whitelist: "data/whitelists/3M-february-2018.txt.gz"
     strandedness: "Forward"
+    simulated: false
   10xHorgue:
     sample_ids:
       - SRR16188429
@@ -106,6 +66,62 @@ datasets:
     read_length: 101
     UMI_length: "12  --soloCBlen 16 --soloBarcodeReadLength 0"
     whitelist: "whitelists/737K-august-2016.txt.gz"
+    simulated: false
+  simulated_mm_RA_50kRpC:
+      sample_ids:
+        - old
+        - young
+        - all
+      genome: "mm10"
+      read_length: 101
+      UMI_length: "10"
+      whitelist: "data/whitelists/737K-august-2016.txt.gz"
+      strandedness: "Unstranded"
+      simulated: true
+  simulated_mm_RA_20kRpC:
+    sample_ids:
+      - old
+      - young
+      - all
+    genome: "mm10"
+    read_length: 101
+    UMI_length: "10"
+    whitelist: "data/whitelists/737K-august-2016.txt.gz"
+    strandedness: "Unstranded"
+    simulated: true
+  simulated_mm_RA_5kRpC:
+    sample_ids:
+      - old
+      - young
+      - all
+    genome: "mm10"
+    read_length: 101
+    UMI_length: "10"
+    whitelist: "data/whitelists/737K-august-2016.txt.gz"
+    strandedness: "Unstranded"
+    simulated: true
+  simulated_mm_RA:
+    sample_ids:
+      - old
+      - young
+      - all
+    genome: "mm10"
+    read_length: 101
+    UMI_length: "10"
+    whitelist: "data/whitelists/737K-august-2016.txt.gz"
+    strandedness: "Unstranded"
+    simulated: true
+  simulated_mm_RA_wGenes:
+    sample_ids:
+      - all
+    genome: "mm10"
+    read_length: 101
+    UMI_length: "10"
+    whitelist: "data/whitelists/737K-august-2016.txt.gz"
+    strandedness: "Unstranded"
+    platform: "10X"
+    simulated: True
+
 
 genomes:
   mm10:

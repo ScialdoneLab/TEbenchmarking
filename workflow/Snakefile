@@ -2,91 +2,141 @@ from snakemake.utils import min_version
 import glob
 min_version("5.3.0")
 
-# add paths of the directories where results of each tool should be stored
-RESULTS_PATH_STAR=""
-RESULTS_PATH_STARsoloTE=""
-RESULTS_PATH_SoloTE=""
-RESULTS_PATH_Stellarscope=""
+PATHS = config.get("paths", {})
+RESULT_PATHS = PATHS.get("results", {})
+
+MAIN_PATH = PATHS.get("main", ".")
+DATA_PATH = PATHS.get("data", "snakemake_data")
+
+RESULTS_PATH_STAR = RESULT_PATHS.get("star", ".")
+RESULTS_PATH_STARsoloTE = RESULT_PATHS.get("starsolo_te", ".")
+RESULTS_PATH_SoloTE = RESULT_PATHS.get("solote", ".")
+RESULTS_PATH_Stellarscope = RESULT_PATHS.get("stellarscope", ".")
+
+BASE_DIR = workflow.current_basedir
 
 
-DATA_PATH=".../snakemake_data" # path to directory where input data is stored
-MAIN_PATH=".../TEbenchmarking" # path of this repo
-BASE_DIR=workflow.current_basedir
+# get names of real samples
+REAL_DATASET_SAMPLE_PAIRS = [
+    (dataset, sample_id)
+    for dataset, settings in config["datasets"].items()
+    if not settings["simulated"]
+    for sample_id in settings["sample_ids"]
+]
+REAL_DATASET_NAMES, REAL_SAMPLE_IDS = zip(*REAL_DATASET_SAMPLE_PAIRS)
 
+# get names of simulated samples
+SIMULATED_DATASET_SAMPLE_PAIRS = [
+    (dataset, sample_id)
+    for dataset, settings in config["datasets"].items()
+    if settings["simulated"]
+    for sample_id in settings["sample_ids"]
+]
+SIMULATED_DATASET_NAMES, SIMULATED_SAMPLE_IDS = zip(*SIMULATED_DATASET_SAMPLE_PAIRS)
 
-include: "rules/common.smk"
-include: "rules/star_align.smk"
-include: "rules/starSolo_TE.smk"
-include: "rules/soloTE.smk"
-include: "rules/stellarscope.smk"
+WORKFLOW_DIAGRAMS = [
+    "workflow/schemas/rulegraph.png",
+    "workflow/schemas/dag.png",
+]
 
 rule allout:
     """
     Collect the main outputs of the workflow.
     """
     input:
-        "workflow/schemas/rulegraph.png",
-        "workflow/schemas/dag.png",
+        WORKFLOW_DIAGRAMS,
 
-        # SoloTE
-        ## real datasets
-        RESULTS_PATH_SoloTE + "/results/SoloTEout/10xPBMC/pbmc8k/",
-        RESULTS_PATH_SoloTE + "/results/SoloTEout_thr0/10xPBMC/pbmc8k/",
-        RESULTS_PATH_SoloTE + "/results/SoloTEout_thr1/10xPBMC/pbmc8k/",
-        RESULTS_PATH_SoloTE + "/results/SoloTEout_thr2/10xPBMC/pbmc8k/",
-        RESULTS_PATH_SoloTE + "/results/SoloTEout/10xMouse_RA/LIF/",
-        RESULTS_PATH_SoloTE + "/results/SoloTEout_thr0/10xMouse_RA/LIF/",
-        RESULTS_PATH_SoloTE + "/results/SoloTEout_thr1/10xMouse_RA/LIF/",
-        RESULTS_PATH_SoloTE + "/results/SoloTEout_thr2/10xMouse_RA/LIF/",
-        ## TE simulations
-        RESULTS_PATH_SoloTE + "/results/SoloTEout/simulated_mm_RA/all",
-        RESULTS_PATH_SoloTE + "/results/SoloTEout/simulated_mm_RA/young",
-        RESULTS_PATH_SoloTE + "/results/SoloTEout/simulated_mm_RA/old",
-        RESULTS_PATH_SoloTE + "/results/SoloTEout_thr0/simulated_mm_RA/all",
-        RESULTS_PATH_SoloTE + "/results/SoloTEout_thr0/simulated_mm_RA/young",
-        RESULTS_PATH_SoloTE + "/results/SoloTEout_thr0/simulated_mm_RA/old",
-        RESULTS_PATH_SoloTE + "/results/SoloTEout_thr1/simulated_mm_RA/all",
-        RESULTS_PATH_SoloTE + "/results/SoloTEout_thr1/simulated_mm_RA/young",
-        RESULTS_PATH_SoloTE + "/results/SoloTEout_thr1/simulated_mm_RA/old",
-        RESULTS_PATH_SoloTE + "/results/SoloTEout_thr2/simulated_mm_RA/all",
-        RESULTS_PATH_SoloTE + "/results/SoloTEout_thr2/simulated_mm_RA/young",
-        RESULTS_PATH_SoloTE + "/results/SoloTEout_thr2/simulated_mm_RA/old",
-        ## gene+TE simulation
-        RESULTS_PATH_SoloTE + "/results/SoloTEout/simulated_mm_RA_wGenes/all",
-        RESULTS_PATH_SoloTE + "/results/SoloTEout_thr0/simulated_mm_RA_wGenes/all",
-        RESULTS_PATH_SoloTE + "/results/SoloTEout_thr1/simulated_mm_RA_wGenes/all",
-        RESULTS_PATH_SoloTE + "/results/SoloTEout_thr2/simulated_mm_RA_wGenes/all",
-
-        # Stellarscope
-        ## real datasets
-        RESULTS_PATH_Stellarscope + "/results/stellarscope_out/10xPBMC/pbmc8k/pseudobulk/",
+        # REAL DATASETS
+        ## SoloTE
+        expand(
+            RESULTS_PATH_SoloTE
+            + "/results/SoloTEout/{dataset}/{sample_id}",
+            zip,
+            dataset=REAL_DATASET_NAMES,
+            sample_id=REAL_SAMPLE_IDS,
+        ),
+        ## Stellarscope
+        expand(
+            RESULTS_PATH_Stellarscope
+            + "/results/stellarscope_out/{dataset}/{sample_id}/pseudobulk",
+            zip,
+            dataset=REAL_DATASET_NAMES,
+            sample_id=REAL_SAMPLE_IDS,
+        ),
         RESULTS_PATH_Stellarscope + "/results/stellarscope_out/10xPBMC/pbmc8k/celltype/",
-        RESULTS_PATH_Stellarscope + "/results/stellarscope_out/10xMouse_RA/LIF/pseudobulk/",
-        ## TE simulations
-        RESULTS_PATH_Stellarscope + "/results/stellarscope_out/hg_simulated/10xPBMC_sim/pseudobulk/",
-        RESULTS_PATH_Stellarscope + "/results/stellarscope_out/simulated_mm_RA/old/pseudobulk/",
-        RESULTS_PATH_Stellarscope + "/results/stellarscope_out/simulated_mm_RA/young/pseudobulk/",
-        RESULTS_PATH_Stellarscope + "/results/stellarscope_out/simulated_mm_RA/all/pseudobulk/",
-        RESULTS_PATH_Stellarscope + "/results/stellarscope_out/simulated_mm_RA/old/pseudobulk_thr0.9/",
-        RESULTS_PATH_Stellarscope + "/results/stellarscope_out/simulated_mm_RA/young/pseudobulk_thr0.9/",
-        RESULTS_PATH_Stellarscope + "/results/stellarscope_out/simulated_mm_RA/all/pseudobulk_thr0.9/",
-        # gene+TE simulation
-        RESULTS_PATH_Stellarscope + "/results/stellarscope_out/simulated_mm_RA_wGenes/all/pseudobulk/"
-        RESULTS_PATH_Stellarscope + "/results/stellarscope_out/simulated_mm_RA_wGenes_pseudobulk_onestep/all/all_pseudobulk-TE_counts.mtx",
+        ## STARsolo
+        expand(
+            RESULTS_PATH_STARsoloTE
+            + "/results/STARsolo_EM_TE/{dataset}/{sample_id}/TE_Solo.out",
+            zip,
+            dataset=REAL_DATASET_NAMES,
+            sample_id=REAL_SAMPLE_IDS,
+        ),
 
-        # STARsolo TE with and without EM
-        ## real datasets
-        RESULTS_PATH_STARsoloTE + "/results/STARsolo_EM_TE/10xMouse_RA/LIF/TE_Solo.out",
-        RESULTS_PATH_STARsoloTE + "/results/STARsolo_EM_TE/10xPBMC/pbmc8k/TE_Solo.out",
-        ## TE simulations
-        RESULTS_PATH_STARsoloTE + "/results/STARsolo_EM_TE/simulated_mm_RA/all/TE_Solo.out",
-        RESULTS_PATH_STARsoloTE + "/results/STARsolo_EM_TE/simulated_mm_RA/old/TE_Solo.out",
-        RESULTS_PATH_STARsoloTE + "/results/STARsolo_EM_TE/simulated_mm_RA/young/TE_Solo.out",
-        # gene+TE simulation
-        RESULTS_PATH_STARsoloTE + "/results/STARsolo_EM_TEwGenes/simulated_mm_RA_wGenes/all/TE_Solo.out"
-        #RESULTS_PATH_STARsoloTE + "/results/STARsolo_EM/simulated_mm_RA/all/TE_Solo.out"
-        
-        
+        # SIMULATED DATASETS
+        ## SoloTE
+        ### default
+        expand(
+            RESULTS_PATH_SoloTE
+            + "/results/SoloTEout/{dataset}/{sample_id}",
+            zip,
+            dataset=SIMULATED_DATASET_NAMES,
+            sample_id=SIMULATED_SAMPLE_IDS,
+        ),
+        ### thr 0
+        expand(
+            RESULTS_PATH_SoloTE
+            + "/results/SoloTEout_thr0/{dataset}/{sample_id}",
+            zip,
+            dataset=SIMULATED_DATASET_NAMES,
+            sample_id=SIMULATED_SAMPLE_IDS,
+        ),
+        ### thr 1
+        expand(
+            RESULTS_PATH_SoloTE
+            + "/results/SoloTEout_thr1/{dataset}/{sample_id}",
+            zip,
+            dataset=SIMULATED_DATASET_NAMES,
+            sample_id=SIMULATED_SAMPLE_IDS,
+        ),
+        ### thr 2
+        expand(
+            RESULTS_PATH_SoloTE
+            + "/results/SoloTEout_thr2/{dataset}/{sample_id}",
+            zip,
+            dataset=SIMULATED_DATASET_NAMES,
+            sample_id=SIMULATED_SAMPLE_IDS,
+        ),
+        ## Stellarscope
+        ### pseudobulk
+        expand(
+            RESULTS_PATH_Stellarscope
+            + "/results/stellarscope_out/{dataset}/{sample_id}/pseudobulk",
+            zip,
+            dataset=SIMULATED_DATASET_NAMES,
+            sample_id=SIMULATED_SAMPLE_IDS,
+        ),
+        ### thr 0.9
+        expand(
+            RESULTS_PATH_Stellarscope
+            + "/results/stellarscope_out/simulated_mm_RA/{sample_id}/pseudobulk_thr0.9",
+            sample_id=[
+                "old",
+                "young"
+            ],
+        ),
+        # Standard STARsolo TE
+        [
+            RESULTS_PATH_STARsoloTE
+            + f"/results/STARsolo_EM_TE/{dataset}/{sample_id}/TE_Solo.out"
+            for dataset, sample_id in SIMULATED_DATASET_SAMPLE_PAIRS
+            if dataset != "simulated_mm_RA_wGenes"
+        ],
+        # STARsolo TEs + GENES
+        RESULTS_PATH_STARsoloTE
+        + "/results/STARsolo_EM_TEwGenes/"
+          "simulated_mm_RA_wGenes/all/TE_Solo.out"
+
 
 
 rule generate_rulegraph:
@@ -113,3 +163,9 @@ rule generate_dag:
         """
         snakemake --snakefile workflow/Snakefile --dag | dot -Tpng > {output}
         """
+
+include: "rules/common.smk"
+include: "rules/star_align.smk"
+include: "rules/starSolo_TE.smk"
+include: "rules/soloTE.smk"
+include: "rules/stellarscope.smk"
