@@ -329,6 +329,6 @@ To extend the benchmark with a new tool:
 4. add a configurable output root under `paths.results`;
 5. use `{dataset}` and `{sample_id}` wildcards so the tool works with existing datasets;
 6. declare threads, memory, logs, and benchmark files;
-7. add only the final outputs to the aggregation rule;
+7. add only the final outputs to the aggregation rule
 
 
