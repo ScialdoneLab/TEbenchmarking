@@ -52,7 +52,7 @@ The rules are divided across:
 | `workflow/rules/starSolo_TE.smk` | STARsolo-based TE quantification |
 | `workflow/rules/stellarscope.smk` | Stellarscope preprocessing and assignment |
 
-he rule-level dependency graph is available at
+The rule-level dependency graph is available at
 [`workflow/schemas/rulegraph.svg`](workflow/schemas/rulegraph.svg).
 
 ## Requirements
