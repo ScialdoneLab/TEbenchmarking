@@ -1,6 +1,6 @@
 FROM condaforge/mambaforge:latest
 LABEL io.github.snakemake.containerized="true"
-LABEL io.github.snakemake.conda_env_hash="ab20aa59b286ac8e4203c30fe1e3983a5f60454cca204b7bacdca66861006de3"
+LABEL io.github.snakemake.conda_env_hash="dad1907b87735ae13f8884411f311022d61e508c26e36784ee84265bcf36e87e"
 
 # Step 1: Retrieve conda environments
 
@@ -298,9 +298,9 @@ RUN mkdir -p /conda-envs/56dd8ba287577af68dda9fa7ad8e1f42
 COPY workflow/envs/align.yml /conda-envs/56dd8ba287577af68dda9fa7ad8e1f42/environment.yaml
 
 # Conda environment:
-#   source: workflow/envs/stellarscope.yml
-#   prefix: /conda-envs/a92800e0cba33b7037bf3ad8d760e627
-#   name: stellarscope
+#   source: workflow/envs/stellarscope_bioconda.yml
+#   prefix: /conda-envs/a1509b0864e20ad54ebe9891d431ae9f
+#   name: stellarscope_bioconda
 #   channels:
 #     - conda-forge
 #     - bioconda
@@ -310,82 +310,72 @@ COPY workflow/envs/align.yml /conda-envs/56dd8ba287577af68dda9fa7ad8e1f42/enviro
 #   dependencies:
 #     - _libgcc_mutex=0.1=conda_forge
 #     - _openmp_mutex=4.5=2_gnu
-#     - anndata=0.10.8=pyhd8ed1ab_0
-#     - array-api-compat=1.8=pyhd8ed1ab_0
-#     - bzip2=1.0.8=h4bc722e_7
-#     - c-ares=1.33.0=ha66036c_0
-#     - ca-certificates=2024.7.4=hbcca054_0
-#     - cached-property=1.5.2=hd8ed1ab_1
-#     - cached_property=1.5.2=pyha770c72_1
-#     - cython=3.0.11=py312hca68cad_0
-#     - exceptiongroup=1.2.2=pyhd8ed1ab_0
-#     - future=1.0.0=pyhd8ed1ab_0
-#     - h5py=3.11.0=nompi_py312hb7ab980_102
-#     - hdf5=1.14.3=nompi_hdf9ad27_105
-#     - htslib=1.20=h5efdd21_2
+#     - bzip2=1.0.8=hda65f42_8
+#     - c-ares=1.34.5=hb9d3cd8_0
+#     - ca-certificates=2025.11.12=hbd8a1cb_0
+#     - future=1.0.0=pyhd8ed1ab_2
+#     - htslib=1.22.1=h566b1c6_0
+#     - icu=75.1=he02047a_0
 #     - intervaltree=3.1.0=pyhd8ed1ab_1
-#     - keyutils=1.6.1=h166bdaf_0
+#     - keyutils=1.6.3=hb9d3cd8_0
 #     - krb5=1.21.3=h659f571_0
-#     - ld_impl_linux-64=2.40=hf3520f5_7
-#     - libaec=1.1.3=h59595ed_0
-#     - libblas=3.9.0=23_linux64_openblas
-#     - libcblas=3.9.0=23_linux64_openblas
-#     - libcurl=8.9.1=hdb1bdb2_0
-#     - libdeflate=1.21=h4bc722e_0
-#     - libedit=3.1.20191231=he28a2e2_2
+#     - ld_impl_linux-64=2.45=h1aa0949_0
+#     - libblas=3.11.0=1_h4a7cf45_openblas
+#     - libcblas=3.11.0=1_h0358290_openblas
+#     - libcurl=8.17.0=h4e3cde8_0
+#     - libdeflate=1.25=h17f619e_0
+#     - libedit=3.1.20250104=pl5321h7949ede_0
 #     - libev=4.33=hd590300_2
-#     - libexpat=2.6.2=h59595ed_0
-#     - libffi=3.4.2=h7f98852_5
-#     - libgcc-ng=14.1.0=h77fa898_0
-#     - libgfortran-ng=14.1.0=h69a702a_0
-#     - libgfortran5=14.1.0=hc5f4f2c_0
-#     - libgomp=14.1.0=h77fa898_0
-#     - liblapack=3.9.0=23_linux64_openblas
-#     - libnghttp2=1.58.0=h47da74e_1
-#     - libnsl=2.0.1=hd590300_0
-#     - libopenblas=0.3.27=pthreads_hac2b453_1
-#     - libsqlite=3.46.0=hde9e2c9_0
-#     - libssh2=1.11.0=h0841786_0
-#     - libstdcxx-ng=14.1.0=hc0a3c3a_0
-#     - libuuid=2.38.1=h0b41bf4_0
+#     - libexpat=2.7.3=hecca717_0
+#     - libffi=3.5.2=h9ec8514_0
+#     - libgcc=15.2.0=h767d61c_7
+#     - libgcc-ng=15.2.0=h69a702a_7
+#     - libgfortran=15.2.0=h69a702a_7
+#     - libgfortran5=15.2.0=hcd61629_7
+#     - libgomp=15.2.0=h767d61c_7
+#     - liblapack=3.11.0=1_h47877c9_openblas
+#     - liblzma=5.8.1=hb9d3cd8_2
+#     - libnghttp2=1.67.0=had1ee68_0
+#     - libnsl=2.0.1=hb9d3cd8_1
+#     - libopenblas=0.3.30=pthreads_h94d23a6_4
+#     - libsqlite=3.51.0=hee844dc_0
+#     - libssh2=1.11.1=hcf80075_0
+#     - libstdcxx=15.2.0=h8f9b012_7
+#     - libstdcxx-ng=15.2.0=h4852527_7
+#     - libuuid=2.41.2=he9a06e4_0
 #     - libxcrypt=4.4.36=hd590300_1
-#     - libzlib=1.3.1=h4ab18f5_1
-#     - natsort=8.4.0=pyhd8ed1ab_0
-#     - ncurses=6.5=h59595ed_0
-#     - numpy=2.0.1=py312h1103770_0
-#     - openssl=3.3.1=h4bc722e_2
-#     - packaging=24.1=pyhd8ed1ab_0
-#     - pandas=2.2.2=py312h1d6d2e6_1
-#     - pip=24.2=pyhd8ed1ab_0
-#     - pysam=0.22.1=py312hcfdcdd7_2
-#     - python=3.12.5=h2ad013b_0_cpython
-#     - python-dateutil=2.9.0=pyhd8ed1ab_0
-#     - python-tzdata=2024.1=pyhd8ed1ab_0
-#     - python_abi=3.12=4_cp312
-#     - pytz=2024.1=pyhd8ed1ab_0
-#     - pyyaml=6.0.2=py312h41a817b_0
-#     - readline=8.2=h8228510_1
-#     - samtools=1.20=h50ea8bc_1
-#     - scipy=1.14.0=py312hc2bc53b_1
-#     - setuptools=72.1.0=pyhd8ed1ab_0
-#     - six=1.16.0=pyh6c4a22f_0
-#     - sortedcontainers=2.4.0=pyhd8ed1ab_0
-#     - star=2.7.11b=h43eeafb_2
-#     - tk=8.6.13=noxft_h4845f30_101
-#     - tzdata=2024a=h0c530f3_0
-#     - wheel=0.44.0=pyhd8ed1ab_0
-#     - xz=5.2.6=h166bdaf_0
-#     - yaml=0.2.5=h7f98852_2
-#     - zlib=1.3.1=h4ab18f5_1
-#     - zstd=1.5.6=ha6fb4c9_0
-#     - pip:
-#         - git+https://github.com/nixonlab/stellarscope.git
-RUN mkdir -p /conda-envs/a92800e0cba33b7037bf3ad8d760e627
-COPY workflow/envs/stellarscope.yml /conda-envs/a92800e0cba33b7037bf3ad8d760e627/environment.yaml
+#     - libzlib=1.3.1=hb9d3cd8_2
+#     - ncurses=6.5=h2d0b736_3
+#     - numpy=2.3.5=py312h33ff503_0
+#     - openssl=3.6.0=h26f9b46_0
+#     - packaging=25.0=pyh29332c3_1
+#     - pandas=2.3.3=py312hf79963d_1
+#     - pip=25.3=pyh8b19718_0
+#     - pysam=0.23.3=py312h47d5410_1
+#     - python=3.12.12=hd63d673_1_cpython
+#     - python-dateutil=2.9.0.post0=pyhe01879c_2
+#     - python-tzdata=2025.2=pyhd8ed1ab_0
+#     - python_abi=3.12=8_cp312
+#     - pytz=2025.2=pyhd8ed1ab_0
+#     - pyyaml=6.0.3=py312h8a5da7c_0
+#     - readline=8.2=h8c095d6_2
+#     - samtools=1.22.1=h96c455f_0
+#     - scipy=1.16.3=py312h7a1785b_1
+#     - setuptools=80.9.0=pyhff2d567_0
+#     - six=1.17.0=pyhe01879c_1
+#     - sortedcontainers=2.4.0=pyhd8ed1ab_1
+#     - stellarscope=1.5=py312h0fa9677_0
+#     - tk=8.6.13=noxft_ha0e22de_103
+#     - tzdata=2025b=h78e105d_0
+#     - wheel=0.45.1=pyhd8ed1ab_1
+#     - yaml=0.2.5=h280c20c_3
+#     - zstd=1.5.7=hb8e6e7a_2
+RUN mkdir -p /conda-envs/a1509b0864e20ad54ebe9891d431ae9f
+COPY workflow/envs/stellarscope_bioconda.yml /conda-envs/a1509b0864e20ad54ebe9891d431ae9f/environment.yaml
 
 # Step 2: Generate conda environments
 
 RUN mamba env create --prefix /conda-envs/bb2ec8599737523bbc0e00f040475726 --file /conda-envs/bb2ec8599737523bbc0e00f040475726/environment.yaml && \
     mamba env create --prefix /conda-envs/56dd8ba287577af68dda9fa7ad8e1f42 --file /conda-envs/56dd8ba287577af68dda9fa7ad8e1f42/environment.yaml && \
-    mamba env create --prefix /conda-envs/a92800e0cba33b7037bf3ad8d760e627 --file /conda-envs/a92800e0cba33b7037bf3ad8d760e627/environment.yaml && \
+    mamba env create --prefix /conda-envs/a1509b0864e20ad54ebe9891d431ae9f --file /conda-envs/a1509b0864e20ad54ebe9891d431ae9f/environment.yaml && \
     mamba clean --all -y

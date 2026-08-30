@@ -98,7 +98,7 @@ datasets:
     genome: "mm10"
     read_length: 101
     UMI_length: "10"
-    whitelist: "data/whitelists/737K-august-2016.txt.gz"
+    whitelist: "whitelists/737K-august-2016.txt.gz"
     strandedness: "Unstranded"
     simulated: true
   simulated_mm_RA:
@@ -109,7 +109,7 @@ datasets:
     genome: "mm10"
     read_length: 101
     UMI_length: "10"
-    whitelist: "data/whitelists/737K-august-2016.txt.gz"
+    whitelist: "whitelists/737K-august-2016.txt.gz"
     strandedness: "Unstranded"
     simulated: true
   simulated_mm_RA_wGenes:

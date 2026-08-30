@@ -14,7 +14,7 @@ rule create_TE_STARsolo_annotation:
     resources:
         mem_gb=8
     benchmark:
-        "../benchmarks/unzip_TEannotation_{genome_id}.txt"
+        "benchmarks/unzip_TEannotation_{genome_id}.txt"
     conda:
         "../envs/align.yml"
     shell:
@@ -51,7 +51,7 @@ rule index_genome_TE:
     resources:
         mem_gb=48
     benchmark:
-        "../benchmarks/index_genome_TE_{genome_id}_{read_length}.txt"
+        "benchmarks/index_genome_TE_{genome_id}_{read_length}.txt"
     conda:
         "../envs/align.yml"
     shell:
@@ -145,7 +145,7 @@ rule create_TEwGenes_annotation:
     resources:
         mem_gb=16
     benchmark:
-        "../benchmarks/crete_TEwGenes_annotation_{genome_id}.txt"
+        "benchmarks/create_TEwGenes_annotation_{genome_id}.txt"
     conda:
         "../envs/align.yml"
     shell:
@@ -171,7 +171,7 @@ rule index_genome_TEwGenes:
     resources:
         mem_gb=48
     benchmark:
-        "../benchmarks/index_genome_TEwGenes_{genome_id}_{read_length}.txt"
+        "benchmarks/index_genome_TEwGenes_{genome_id}_{read_length}.txt"
     conda:
         "../envs/align.yml"
     shell:

@@ -52,7 +52,7 @@ rule unzip_TEannotation:
     resources:
         mem_gb=16
     benchmark:
-        "benchmark/unzip_TEannotation_{genome_id}.txt"
+        "benchmarks/unzip_TEannotation_{genome_id}.txt"
     conda:
         "../envs/stellarscope_bioconda.yml"
     shell:

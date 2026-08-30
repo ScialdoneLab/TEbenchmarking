@@ -2,13 +2,13 @@
 
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.18772673.svg)](https://doi.org/10.5281/zenodo.18772673)
 
-This repository contains a Snakemake workflow for benchmarking locus-specific transposable-element (TE) quantification from single-cell RNA-seq data. It additionally includes R notebooks used for evaluation of the results.
+TEbenchmarking contains a Snakemake workflow for benchmarking locus-specific transposable-element (TE) quantification from single-cell RNA-seq data. It includes workflows for STARsolo, SoloTE and Stellarscope, together with simulation scripts and R notebooks used to evaluate their results.
 
 - Preprint: [10.64898/2026.02.26.708244](https://doi.org/10.64898/2026.02.26.708244)
 - Reproducibility data: [Zenodo record 18772673](https://doi.org/10.5281/zenodo.18772673)
 
 
-The large FASTQ, reference, annotation, and result files are not stored in Git. This README explains where to obtain them, where the workflow expects them, and how to run or extend the Snakemake workflow.
+Large FASTQ files, reference genomes, annotations and generated results are not stored in GitHub. This README explains how to obtain and arrange those files, configure storage locations, run the workflow, and add datasets or tools.
 
 ## Citation
 
@@ -75,7 +75,7 @@ git submodule update --init --recursive
 
 ## 2. Choose data and result locations
 
-Edit `config/config.yml`. The `paths` section separates the repository, large input data, and outputs:
+Edit the `paths` section of `config/config.yml`:
 
 ```yaml
 paths:
@@ -88,9 +88,20 @@ paths:
     stellarscope: "."
 ```
 
-With these defaults, inputs are read from `./snakemake_data` and outputs are written below `./results` in the repository.
+`paths.data` is the root containing all external inputs: FASTQs, reference genomes, gene annotations, TE annotations, barcode whitelists and optional cell annotations.
 
-For example:
+Each entry under `paths.results` is the root used by the corresponding workflow component:
+
+| Key | Contents |
+| --- | --- |
+| `star` | STAR indexes and standard STARsolo alignments |
+| `starsolo_te` | STARsolo TE and gene-plus-TE results |
+| `solote` | SoloTE results |
+| `stellarscope` | Stellarscope results |
+
+With the default values, inputs are read from `./snakemake_data`, while indexes and results are written inside the repository.
+
+To use separate mounted volumes, for example:
 
 ```yaml
 paths:
@@ -103,7 +114,7 @@ paths:
     stellarscope: "/mnt/results/stellarscope"
 ```
 
-The workflow appends its own `indexes/` and `results/` directories to these roots. 
+The workflow appends `indexes/` or `results/` to these result roots.
 
 Relative paths are interpreted from the directory in which Snakemake runs. Run all commands below from the repository root.
 
@@ -122,7 +133,7 @@ Extract the archives into the directory configured as `paths.data`.
 
 ## 4. Prepare the input directory
 
-The data root must have this structure:
+The complete input layout is:
 
 ```text
 <data-root>/
@@ -134,7 +145,7 @@ The data root must have this structure:
 │       │       └── ...R2...fastq.gz
 │       └── annotation/
 │           └── <sample_id>/
-│               └── celltype_tsv.tsv      # Only for cell-type Stellarscope
+│               └── celltype_tsv.tsv      # Only for Stellarscope cell-type pooling
 ├── references/
 │   ├── hg38/
 │   │   ├── <human-genome>.fa.gz
@@ -150,6 +161,8 @@ The data root must have this structure:
     ├── 3M-february-2018.txt.gz
     └── 737K-august-2016.txt.gz
 ```
+
+FASTQ filenames must contain `R1` or `R2`, because the current alignment rules use those strings to identify barcode/UMI and cDNA reads.
 
 
 ### Reference genomes and gene annotations
@@ -300,7 +313,6 @@ Example:
 ```bash
 snakemake \
   -s workflow/Snakefile \
-  --configfile config/config.yml \
   --software-deployment-method conda \
   --cores 1 \
   --dry-run \

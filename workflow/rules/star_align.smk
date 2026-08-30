@@ -18,7 +18,7 @@ rule unzip_genomes:
     resources:
         mem_gb=8
     benchmark:
-        "../benchmarks/unzip_genomes_{genome_id}.txt"
+        "benchmarks/unzip_genomes_{genome_id}.txt"
     conda:
         "../envs/align.yml"
     shell:
@@ -45,7 +45,7 @@ rule index_genome:
     resources:
         mem_gb=48
     benchmark:
-        "../benchmarks/index_genome_{genome_id}_{read_length}.txt"
+        "benchmarks/index_genome_{genome_id}_{read_length}.txt"
     conda:
         "../envs/align.yml"
     shell:
@@ -91,7 +91,7 @@ rule STARsolo_align:
     resources:
         mem_gb=96
     benchmark:
-        "../benchmarks/STARsolo_align_{dataset}_{sample_id}_{conf}.txt"
+        "benchmarks/STARsolo_align_{dataset}_{sample_id}_{conf}.txt"
     conda:
         "../envs/align.yml"
     shell:

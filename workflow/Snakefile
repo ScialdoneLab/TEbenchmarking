@@ -2,11 +2,13 @@ from snakemake.utils import min_version
 import glob
 min_version("5.3.0")
 
+configfile: "config/config.yml"
+
 PATHS = config.get("paths", {})
 RESULT_PATHS = PATHS.get("results", {})
 
 MAIN_PATH = PATHS.get("main", ".")
-DATA_PATH = PATHS.get("data", "snakemake_data")
+DATA_PATH = PATHS.get("data", "snakemake_data") # fastqs and references
 
 RESULTS_PATH_STAR = RESULT_PATHS.get("star", ".")
 RESULTS_PATH_STARsoloTE = RESULT_PATHS.get("starsolo_te", ".")
@@ -34,18 +36,11 @@ SIMULATED_DATASET_SAMPLE_PAIRS = [
 ]
 SIMULATED_DATASET_NAMES, SIMULATED_SAMPLE_IDS = zip(*SIMULATED_DATASET_SAMPLE_PAIRS)
 
-WORKFLOW_DIAGRAMS = [
-    "workflow/schemas/rulegraph.png",
-    "workflow/schemas/dag.png",
-]
-
 rule allout:
     """
     Collect the main outputs of the workflow.
     """
     input:
-        WORKFLOW_DIAGRAMS,
-
         # REAL DATASETS
         ## SoloTE
         expand(
@@ -125,6 +120,14 @@ rule allout:
                 "young"
             ],
         ),
+        ### 
+        expand(
+            RESULTS_PATH_Stellarscope
+            + "/results/stellarscope_out/{dataset}_pseudobulk_onestep/{sample_id}",
+            zip,
+            dataset=SIMULATED_DATASET_NAMES,
+            sample_id=SIMULATED_SAMPLE_IDS,
+        ),
         # Standard STARsolo TE
         [
             RESULTS_PATH_STARsoloTE
@@ -137,32 +140,30 @@ rule allout:
         + "/results/STARsolo_EM_TEwGenes/"
           "simulated_mm_RA_wGenes/all/TE_Solo.out"
 
+# rule generate_rulegraph:
+#     """
+#     Generate a rulegraph for the workflow.
+#     """
+#     output:
+#         "workflow/schemas/rulegraph.png"
+#     params:
+#         basedir=BASE_DIR
+#     shell:
+#         """
+#         snakemake --snakefile workflow/Snakefile --rulegraph | dot -Tpng > {output}
+#         echo {params.basedir}
+#         """
 
-
-rule generate_rulegraph:
-    """
-    Generate a rulegraph for the workflow.
-    """
-    output:
-        "workflow/schemas/rulegraph.png"
-    params:
-        basedir=BASE_DIR
-    shell:
-        """
-        snakemake --snakefile workflow/Snakefile --rulegraph | dot -Tpng > {output}
-        echo {params.basedir}
-        """
-
-rule generate_dag:
-    """
-    Generate a dag for the workflow.
-    """
-    output:
-        "workflow/schemas/dag.png"
-    shell:
-        """
-        snakemake --snakefile workflow/Snakefile --dag | dot -Tpng > {output}
-        """
+# rule generate_dag:
+#     """
+#     Generate a dag for the workflow.
+#     """
+#     output:
+#         "workflow/schemas/dag.png"
+#     shell:
+#         """
+#         snakemake --snakefile workflow/Snakefile --dag | dot -Tpng > {output}
+#         """
 
 include: "rules/common.smk"
 include: "rules/star_align.smk"
