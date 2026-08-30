@@ -52,6 +52,9 @@ The rules are divided across:
 | `workflow/rules/starSolo_TE.smk` | STARsolo-based TE quantification |
 | `workflow/rules/stellarscope.smk` | Stellarscope preprocessing and assignment |
 
+he rule-level dependency graph is available at
+[`workflow/schemas/rulegraph.svg`](workflow/schemas/rulegraph.svg).
+
 ## Requirements
 
 The workflow is designed for Linux and has been configured with Snakemake 8.11.6. The minimum version declared in the Snakefile is 5.3.0, but using the tested version is recommended.
