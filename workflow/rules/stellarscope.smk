@@ -262,8 +262,6 @@ rule run_stellarscope_celltype:
     input:
         pickle=RESULTS_PATH_Stellarscope + "/results/stellarscope_out/{dataset}/{sample_id}/stload/{sample_id}_stload-checkpoint.dedup_umi.pickle",
         celltypes=DATA_PATH + "/data/{dataset}/annotation/{sample_id}/celltype_tsv.tsv"
-    log:
-        "logs/stellarscope/{dataset}_{sample_id}_run_celltype.log"
     params:
         results_path=RESULTS_PATH_Stellarscope
     threads: 12

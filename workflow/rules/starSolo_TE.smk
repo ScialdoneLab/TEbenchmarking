@@ -127,5 +127,124 @@ rule run_STARsolo_EM:
             > {log}
         """
 
+# STARsolo EM for TE + GENE quantification
+
+rule create_TEwGenes_annotation:
+    """
+    Create gtf file with both TEs and genes
+    """
+    output:
+        TEwGenes_annotation="tmp/TEwGenes_annotation_{genome_id}.gtf",
+        TEwGenes_annotation_zipped="data/TEannotation/TEwGenes_annotation_{genome_id}.gtf.gz"
+    input: 
+        TEannotation="tmp/TEannotation_locus_{genome_id}.gtf",
+        Gene_annotation="tmp/genome_annotation_{genome_id}"
+    log:
+        "create_TEwGenes_annotation_{genome_id}"
+    threads: 6
+    resources:
+        mem_gb=16
+    benchmark:
+        "../benchmarks/crete_TEwGenes_annotation_{genome_id}.txt"
+    conda:
+        "../envs/align.yml"
+    shell:
+        """
+        cat {input.TEannotation} {input.Gene_annotation} > {output.TEwGenes_annotation}
+
+        gzip -c {output.TEwGenes_annotation} > {output.TEwGenes_annotation_zipped}
+        """
+    
+
+rule index_genome_TEwGenes:
+    """
+    Index a genome using star.
+    """
+    output:
+        directory(RESULTS_PATH_STAR+"/indexes/TEwGenes_genomeIndexes_{genome_id}_{read_length}")
+    input:
+        fasta="tmp/genome_fasta_{genome_id}",
+        TEwGenes_annotation="tmp/TEwGenes_annotation_{genome_id}.gtf"
+    log:
+        "logs/index_genome_TEwGenes/{genome_id}_{read_length}.log"
+    threads: 12
+    resources:
+        mem_gb=48
+    benchmark:
+        "../benchmarks/index_genome_TEwGenes_{genome_id}_{read_length}.txt"
+    conda:
+        "../envs/align.yml"
+    shell:
+        """
+        # compute overhang parameter based on read length
+        overhang=$(({wildcards.read_length}-1))
+
+        # index the genome with star
+        STAR --runMode genomeGenerate \
+            --genomeDir {output} \
+            --genomeFastaFiles {input.fasta} \
+            --runThreadN {threads} \
+            --sjdbOverhang $overhang \
+            --sjdbGTFfile {input.TEwGenes_annotation} \
+            > {log}
+        """
+
+
+rule run_STARsolo_EM_TEwGenes:
+    """
+    STARsolo to quantify TE expression with EM algorithm
+    """
+    output:
+        directory(RESULTS_PATH_STARsoloTE + "/results/STARsolo_EM_TEwGenes/{dataset}/{sample_id}/TE_Solo.out")
+    input:
+        fastaFolder=DATA_PATH+"/data/{dataset}/fastqs/{sample_id}/",
+        refDir=get_index_TEwGenes_dir,
+        TEwGenes_annotation=get_TEwGenes_annotation_locus_dataset_unzipped
+    log:
+        "logs/runSTARsolo_EM_TEwGenes/{dataset}_{sample_id}.log"
+    params:
+        whitelist=get_whitelist,
+        UMIlen=get_UMIlength,
+        results_path=RESULTS_PATH_STARsoloTE,
+        strand=get_strandedness
+    threads: 12
+    resources:
+        mem_gb=96
+    benchmark:
+        "benchmarks/STARsolo_EM_TEwGenes_align_{dataset}_{sample_id}.txt"
+    conda:
+        "../envs/align.yml"
+    shell:
+        """
+        # create comma separated lists of R1s and R2s
+        R1s=`ls {input.fastaFolder} | grep R1 | sed "s|^|{input.fastaFolder}/|" | paste -sd,`
+        R2s=`ls {input.fastaFolder} | grep R2 | sed "s|^|{input.fastaFolder}/|" | paste -sd,`
+        echo $R1s 
+        echo $R2s
+
+        # run genome alignment with STAR
+        STAR --genomeDir {input.refDir} \
+        	--readFilesIn $R2s $R1s \
+            --readFilesCommand gunzip -c \
+	        --runThreadN {threads} \
+            --outFilterMismatchNmax 18 \
+            --winAnchorMultimapNmax 100 \
+            --outFilterMultimapNmax 100 \
+            --alignSJoverhangMin 8 \
+            --alignSJDBoverhangMin 1 \
+            --alignMatesGapMax 1000000 \
+            --outFilterScoreMin 30 \
+            --outFileNamePrefix {params.results_path}/results/STARsolo_EM_TEwGenes/{wildcards.dataset}/{wildcards.sample_id}/TE_ \
+            --outSAMtype BAM SortedByCoordinate \
+	        --soloType CB_UMI_Simple \
+	        --soloCBwhitelist  <(gunzip -c {params.whitelist}) \
+	        --soloUMIlen {params.UMIlen} \
+	        --outSAMattributes NH HI AS nM NM MD jM jI XS MC ch cN CR CY UR UY GX GN CB UB sM sS sQ \
+            --sjdbGTFfile {input.TEwGenes_annotation} \
+            --soloMultiMappers EM \
+            --soloFeatures Gene \
+            --soloStrand {params.strand} \
+            > {log}
+        """
 
 

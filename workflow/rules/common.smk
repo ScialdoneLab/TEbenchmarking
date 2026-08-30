@@ -1,5 +1,3 @@
-configfile: "config/config.yml"
-
 # For indexing
 
 def get_genome(wildcards):
@@ -33,7 +31,9 @@ def get_TEannotation_dataset_unzipped(wildcards):
 def get_TEannotation_locus_dataset_unzipped(wildcards):
     genomeid=config["datasets"][wildcards.dataset]["genome"]
     return f"tmp/TEannotation_locus_{genomeid}.gtf"
-
+def get_TEwGenes_annotation_locus_dataset_unzipped(wildcards):
+    genomeid=config["datasets"][wildcards.dataset]["genome"]
+    return f"tmp/TEwGenes_annotation_{genomeid}.gtf"
 
 
 # For alignment
@@ -43,7 +43,7 @@ def get_annotation_dataset(wildcards):
     return f"tmp/genome_annotation_{genomeid}"
 
 def get_whitelist(wildcards):
-    return config["datasets"][wildcards.dataset]["whitelist"]
+    return DATA_PATH + "/" + config["datasets"][wildcards.dataset]["whitelist"]
 
 def get_nmax(wildcards):
     return config["conf"][wildcards.conf]["nmax"]
@@ -62,6 +62,10 @@ def get_index_TE_dir(wildcards):
     readlength=config["datasets"][wildcards.dataset]["read_length"]
     return directory(f"{RESULTS_PATH_STAR}/indexes/TE_genomeIndexes_{genomeid}_{readlength}")
 
+def get_index_TEwGenes_dir(wildcards):
+    genomeid=config["datasets"][wildcards.dataset]["genome"]
+    readlength=config["datasets"][wildcards.dataset]["read_length"]
+    return directory(f"{RESULTS_PATH_STAR}/indexes/TEwGenes_genomeIndexes_{genomeid}_{readlength}")
 
 
 # for STARsolo with TEs

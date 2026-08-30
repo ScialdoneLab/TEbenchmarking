@@ -14,7 +14,7 @@ datasets:
     genome: "hg38"
     read_length: 98
     UMI_length: "10"
-    whitelist: "data/whitelists/10xPBMC_sub_whitelist.tsv.gz"
+    whitelist: "whitelists/10xPBMC_sub_whitelist.tsv.gz"
     strandedness: "Forward"
     simulated: false
   10xMouse_PBMC:
@@ -24,7 +24,7 @@ datasets:
     chromium: "v3"
     read_length: 90
     UMI_length: "12  --soloCBlen 16 --soloBarcodeReadLength 0"
-    whitelist: "data/whitelists/3M-february-2018.txt.gz"
+    whitelist: "whitelists/3M-february-2018.txt.gz"
     strandedness: "Forward"
     simulated: false
     download:
@@ -37,7 +37,7 @@ datasets:
     genome: "hg38"
     read_length: 90
     UMI_length: "12  --soloCBlen 16 --soloBarcodeReadLength 0"
-    whitelist: "data/whitelists/3M-february-2018.txt.gz"
+    whitelist: "whitelists/3M-february-2018.txt.gz"
     strandedness: "Forward"
     simulated: false
     download:
@@ -50,7 +50,7 @@ datasets:
     genome: "mm10"
     read_length: 101 
     UMI_length: "12  --soloCBlen 16 --soloBarcodeReadLength 0"
-    whitelist: "data/whitelists/3M-february-2018.txt.gz"
+    whitelist: "whitelists/3M-february-2018.txt.gz"
     strandedness: "Forward"
     simulated: false
   10xHorgue:
@@ -66,6 +66,7 @@ datasets:
     read_length: 101
     UMI_length: "12  --soloCBlen 16 --soloBarcodeReadLength 0"
     whitelist: "whitelists/737K-august-2016.txt.gz"
+    strandedness: "Forward"
     simulated: false
   simulated_mm_RA_50kRpC:
       sample_ids:
@@ -75,7 +76,7 @@ datasets:
       genome: "mm10"
       read_length: 101
       UMI_length: "10"
-      whitelist: "data/whitelists/737K-august-2016.txt.gz"
+      whitelist: "whitelists/737K-august-2016.txt.gz"
       strandedness: "Unstranded"
       simulated: true
   simulated_mm_RA_20kRpC:
@@ -86,7 +87,7 @@ datasets:
     genome: "mm10"
     read_length: 101
     UMI_length: "10"
-    whitelist: "data/whitelists/737K-august-2016.txt.gz"
+    whitelist: "whitelists/737K-august-2016.txt.gz"
     strandedness: "Unstranded"
     simulated: true
   simulated_mm_RA_5kRpC:
@@ -117,7 +118,7 @@ datasets:
     genome: "mm10"
     read_length: 101
     UMI_length: "10"
-    whitelist: "data/whitelists/737K-august-2016.txt.gz"
+    whitelist: "whitelists/737K-august-2016.txt.gz"
     strandedness: "Unstranded"
     platform: "10X"
     simulated: True

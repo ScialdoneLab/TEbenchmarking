@@ -18,7 +18,7 @@ rule setup_SoloTE:
         python code/SoloTE/SoloTE_RepeatMasker_to_BED.py -g {wildcards.genome_id} 2> {log}
 
         # move the TE annotation files to the wanted folders
-        mv {wildcards.genome_id}.fa.out.gz data/TEannotation
+        mv {wildcards.genome_id}.fa.out.gz data/TEannotation/{wildcards.genome_id}_rmsk.fa.out.gz
         mv {wildcards.genome_id}_rmsk.bed data/TEannotation
         # gzip data/TEannotation/{wildcards.genome_id}_rmsk.bed
 
