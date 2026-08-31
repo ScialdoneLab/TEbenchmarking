@@ -1,0 +1,137 @@
+---
+title: "Create TE annotation table"
+output: html_notebook
+---
+
+```{r}
+library(dplyr)
+
+getwd()
+
+StellarscopeAnnotationPath <- "data/TEannotation/mm10_GENCODE_rmsk_TE.gtf.gz"
+SoloTEannotationPath <- "data/TEannotation/mm10_rmsk.bed"
+
+dir.create("annotation")
+```
+
+
+# Mouse mm10 annotation
+
+```{r Stellarscope annotation}
+# read Hammel lab GTF file
+annotation_stellarscope <- read.table(StellarscopeAnnotationPath)
+
+# create renamed dataframe
+annotation_stellarscope_ren <- annotation_stellarscope[, c("V1", "V4", "V5")] # chr, start, end
+colnames(annotation_stellarscope_ren) <- c("chr", "start", "end")
+
+annotation_stellarscope_ren$sw_score <- annotation_stellarscope$V6
+annotation_stellarscope_ren$strand <- annotation_stellarscope$V7
+annotation_stellarscope_ren$locusID <- annotation_stellarscope$V13
+annotation_stellarscope_ren$family <- annotation_stellarscope$V16
+
+# substitute "_" to "-" in the subfamily name and stellarscopeID (as done by Seurat)
+annotation_stellarscope_ren$subfamily <- gsub(pattern = "_", replacement = "-", annotation_stellarscope$V10)
+annotation_stellarscope_ren$class <- annotation_stellarscope$V19
+annotation_stellarscope_ren$stellarscopeID <- gsub("_", "-", annotation_stellarscope_ren$locusID)
+
+annotation_stellarscope <- annotation_stellarscope_ren
+rm(annotation_stellarscope_ren)
+
+head(annotation_stellarscope)
+dim(annotation_stellarscope) # 3725827
+
+write.table(annotation_stellarscope, "annotation/annotation_stellarscope.tsv")
+```
+
+```{r SoloTE annotation}
+# import the annotation used for SoloTE
+annotation_soloTE <- read.table(SoloTEannotationPath)
+colnames(annotation_soloTE) <- c("chr", "start", "end", "soloTE_name", "perc_score", "strand")
+
+# add SoloTE ID column substituting | and _ with - (as done by Seurat)
+annotation_soloTE$soloteID <- gsub("\\|", "-", annotation_soloTE$soloTE_name)
+annotation_soloTE$soloteID <- gsub("_", "-", annotation_soloTE$soloteID)
+
+head(annotation_soloTE)
+dim(annotation_soloTE) # 3653881
+```
+
+```{r merge annotations}
+annotation_common <- merge(annotation_stellarscope, annotation_soloTE, all = TRUE)
+head(annotation_common)
+```
+
+
+```{r}
+# some classes are removed by SoloTE
+
+soloteUnique <- annotation_common[is.na(annotation_common$locusID), ]
+
+stellarscopeUnique <- annotation_common[is.na(annotation_common$soloteID), ]
+
+table(stellarscopeUnique$class)
+```
+
+```{r}
+different_classes <- c("Other", "Satellite", "Unknown", "RNA")
+
+cat(
+    "\t N of TEs unique to SoloTE annotation: \t\t", sum(is.na(annotation_common$locusID)), "\n",
+    "\t N of TEs unique to Stellarscope annotation: \t",
+    sum(is.na(annotation_common[!annotation_common$class %in% different_classes, ]$soloteID)), "\n",
+    "\t Common TEs: \t",
+    sum(!is.na(annotation_common[!annotation_common$class %in% different_classes, ]$soloteID))
+)
+```
+
+
+```{r}
+write.table(annotation_common, "annotation/annotation_mm10_conversion.tsv")
+```
+
+
+
+To calculate the TE age in million years of age (mya), we multiply the JC distance using the following formula:
+(JC_distance * 100) / (subsitution_rate * 2 * 100) * 1000
+For subsitution rate, we used 2.2 and 4.5 for human and mouse, according to Lander et al., 2001 and Waterston et al., 2002, respectively.
+
+```{r add age}
+jc_mm10 <- read.table("data/TEannotation/jc_mm10.txt")
+colnames(jc_mm10) <- c(
+    "chr", "start", "end", "TEsubfamily", "TEfamily", "TEclass",
+    "strand", "propSubs", "JCdistance"
+)
+
+jc_mm10$mya <- (jc_mm10$JCdistance * 100) / (4.5 * 2 * 100) * 1000
+
+summary(jc_mm10$mya)
+
+jc_mm10$start <- jc_mm10$start + 1
+
+jc_mm10$ageClass <- ifelse(jc_mm10$mya < 2, "young", "old")
+
+conversionTable <- merge(annotation_common,
+    jc_mm10[, c("chr", "start", "end", "strand", "propSubs", "mya", "ageClass")],
+    all.x = T
+)
+dim(jc_mm10)
+
+# a few loci differ (7k)
+sum(is.na(conversionTable$ageClass))
+```
+
+```{r}
+# remove the question marks from the classes
+conversionTable$class <- gsub("\\?", "", conversionTable$class)
+```
+
+```{r}
+# check ages by family and order
+table(conversionTable$class, conversionTable$ageClass)
+table(conversionTable$family, conversionTable$ageClass)
+```
+
+```{r}
+write.table(conversionTable, "annotation/annotation_mm10_conversion_withAge.tsv")
+```
